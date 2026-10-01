@@ -1,0 +1,11 @@
+[Unit]
+Description=AIHOT sync (accumulate + regenerate feeds)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aihot-pipeline/run.sh sync
+TimeoutStartSec=900
+# 失败不拖着，timer 下一轮会再来
+SuccessExitStatus=0
