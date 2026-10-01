@@ -1,0 +1,12 @@
+[Unit]
+Description=AIHOT sync every 30 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=30min
+# 机器关机错过的时间点，开机后补跑一次
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target
