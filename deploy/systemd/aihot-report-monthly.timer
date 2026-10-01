@@ -1,0 +1,10 @@
+[Unit]
+Description=AIHOT monthly report (1st of month 09:10)
+
+[Timer]
+OnCalendar=*-*-01 09:10:00
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target
