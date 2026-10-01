@@ -1,0 +1,9 @@
+[Unit]
+Description=AIHOT report (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aihot-pipeline/run.sh %i
+TimeoutStartSec=600
