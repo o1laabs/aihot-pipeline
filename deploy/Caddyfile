@@ -1,0 +1,45 @@
+# Caddyfile —— 单域名，同时反代 Miniflux 并托管自建 feed
+#
+# 放置：/etc/caddy/Caddyfile
+# 生效：systemctl reload caddy
+#
+# ⚠️ 把 miniflux.example.com 换成你的域名，并确认 DNS A 记录指向本机公网 IP。
+#    Caddy 会自动向 Let's Encrypt 申请并续期证书，无需额外配置。
+#
+# 如果你没有域名：把下面整块换成
+#     :80 {
+#         handle /feeds/* { root * /var/www; file_server }
+#         handle { reverse_proxy 127.0.0.1:8080 }
+#     }
+#   然后用 IP 访问（无 TLS）。但不建议长期这样暴露公网。
+
+miniflux.example.com {
+	encode gzip
+
+	# 自建 feed：https://miniflux.example.com/feeds/aihot-selected.xml
+	# handle_path 会剥掉 /feeds 前缀，所以 root 指到父目录
+	handle_path /feeds/* {
+		root * /var/www/feeds
+		file_server browse
+		header {
+			# 阅读器轮询较勤，给个短缓存
+			Cache-Control "public, max-age=300"
+			# 明确告诉客户端是 XML，避免被当 HTML 渲染
+			X-Content-Type-Options "nosniff"
+		}
+	}
+
+	# 其余全部反代给 Miniflux（只监听 127.0.0.1:8080，不直接暴露）
+	handle {
+		reverse_proxy 127.0.0.1:8080 {
+			header_up X-Real-IP {remote_host}
+		}
+	}
+
+	log {
+		output file /var/log/caddy/miniflux-access.log {
+			roll_size 10mb
+			roll_keep 3
+		}
+	}
+}
