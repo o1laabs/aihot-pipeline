@@ -1,0 +1,24 @@
+# 运行时产物（不入库）
+__pycache__/
+*.pyc
+*.pyo
+
+# 累积数据（本地产生，体积会增长）
+aihot.db
+aihot.db-journal
+aihot.db-wal
+
+# 推送状态（记录已见条目 id）
+watch_state.json
+
+# 生成的报告
+reports/
+
+# 生成的 feed
+*.xml
+
+# 编辑器 / 系统
+.DS_Store
+*.swp
+.idea/
+.vscode/
