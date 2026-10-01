@@ -1,0 +1,9 @@
+[Unit]
+Description=AIHOT realtime watcher (poll + push)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aihot-pipeline/run.sh watch
+TimeoutStartSec=300
