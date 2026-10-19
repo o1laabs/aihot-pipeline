@@ -125,16 +125,29 @@ sudo nano /etc/miniflux.conf
 sudo systemctl restart miniflux
 ```
 
-### 在 Miniflux 里订阅
+### 在 Miniflux 里订阅三个 feed
 
 ```
-https://<你的域名>/feeds/aihot-selected.xml     # 精选，约 20 条/天
-https://<你的域名>/feeds/aihot-all.xml          # 全部，量更大
+https://<你的域名>/feeds/aihot-selected.xml     # 精选线索，约 20 条/天
+https://<你的域名>/feeds/aihot-all.xml          # 全部线索，量更大
+https://<你的域名>/feeds/reports.xml            # ★ 日报/周报/月报
 ```
 
-⭐ **建议给这两个 feed 开启 "Fetch original content"。**
-这样 Miniflux 会去抓原文正文 —— 因为我们的 feed 把 `<link>` 指向了原文，
-阅读器里能直接看全文，不用跳出去。
+⭐ **前两个建议开启 "Fetch original content"。**
+因为 feed 的 `<link>` 指向原文，Miniflux 会去抓正文，阅读器里直接看全文。
+
+⚠️ **报告 feed 不需要开** —— 正文已内嵌在 item 里，开了反而多余。
+
+报告的永久链接形如：
+
+```
+https://<你的域名>/reports/daily-2026-10-01.html
+https://<你的域名>/reports/weekly-2026-10-01.html
+https://<你的域名>/reports/monthly-2026-10-01.html
+```
+
+这些 HTML 由 `report_rss.py` 生成到 `/var/www/reports`，Caddy 的
+`/reports/*` 路由直接托管（见 `Caddyfile`）。
 
 ---
 
