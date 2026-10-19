@@ -29,6 +29,17 @@ miniflux.example.com {
 		}
 	}
 
+	# 报告页：https://miniflux.example.com/reports/daily-2026-10-01.html
+	# 由 reports.xml 的每条 item 链接过来
+	handle_path /reports/* {
+		root * /var/www/reports
+		file_server
+		header {
+			Cache-Control "public, max-age=600"
+			X-Content-Type-Options "nosniff"
+		}
+	}
+
 	# 其余全部反代给 Miniflux（只监听 127.0.0.1:8080，不直接暴露）
 	handle {
 		reverse_proxy 127.0.0.1:8080 {
