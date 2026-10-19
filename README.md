@@ -59,7 +59,24 @@ AIHOT 官方 feed 的 `<link>` 指向 `aihot.news/items/<id>` —— **它自己
 | `aihot2rss.py` | AIHOT → 自建 RSS（link 指向原文） | 每 15–30 分钟 |
 | `store.py` | SQLite 累积（幂等，重复跑不重复存） | **每天至少一次**（月报前提） |
 | `report.py` | 日报 / 周报 / 月报 | 按周期 |
+| `md2html.py` | 极简 Markdown → HTML（零依赖，白名单转义） | 被 `report_rss.py` 调用 |
+| `report_rss.py` | **报告 → 可订阅 RSS**（每份报告一个 item） | 每份报告生成后 |
 | `watch.py` | 轮询 + 去重 + 实时推送 | 每 5 分钟 |
+
+### 报告也是 feed
+
+日报 / 周报 / 月报生成后，`report_rss.py` 会把它们变成
+`reports.xml` + 每份一个独立 HTML 页：
+
+```
+reports/daily-2026-10-01.md   →   /var/www/reports/daily-2026-10-01.html
+                              →   /var/www/feeds/reports.xml 的一个 item
+```
+
+**在 Miniflux 里当普通 feed 订阅即可** —— 报告会进阅读历史，可回看，
+不用额外配推送通道。
+
+⚠️ 报告 feed **不需要**开 "Fetch original content"：正文已内嵌在 item 里。
 
 ---
 
